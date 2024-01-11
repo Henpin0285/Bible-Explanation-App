@@ -17,5 +17,6 @@ Data Storage:
 The explanations are stored in a JSON file (bible_explanations.json). The JSON format allows for easy serialization and deserialization of data, ensuring that explanations persist between different sessions of the application.
 
 File Structure:
+
 a. journal_app.py: The main Python script implementing the Bible Explanation application.
 b. bible_explanations.json: The JSON file storing the explanations.
