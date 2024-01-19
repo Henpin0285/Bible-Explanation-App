@@ -7,7 +7,7 @@ Key Features:
 
 2. View Explanations: Users can view a list of saved explanations, including relevant information such as date, book, chapter, verse, and headline.
 
-  3.Save Explanations to File: The application allows users to save their explanations to a JSON file for future reference.
+3. Save Explanations to File: The application allows users to save their explanations to a JSON file for future reference.
 
 4. Delete Explanation: Users can delete explanations by selecting the index of the explanation they wish to remove.
 
