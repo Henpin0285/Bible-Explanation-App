@@ -75,19 +75,27 @@ def add_explanation():
         bible_explanations.append(explanation)
         print("Explanation added successfully!")
 
+    # Sort the list by date before saving
+    bible_explanations.sort(key=lambda x: x.get('date', ''))
+
     # Save data immediately after each operation
     save_to_file()
 
 def save_to_file():
     with open(json_file_path, "w") as file:
-        json.dump(bible_explanations, file)
-    print("Explanations saved to file.")
-    
+        # Sort explanations by date before saving
+        sorted_explanations = sorted(bible_explanations, key=lambda x: x.get('date', ''))
+        json.dump(sorted_explanations, file)
+
+    print("Explanations saved to file.")    
 
 def view_explanations():
     if not bible_explanations:
         print("No explanations available.")
     else:
+        # Sort explanations by date
+        sorted_explanations = sorted(bible_explanations, key=lambda x: x.get('date', ''))
+        
         print("\n*** Bible Explanations ***")
         for idx, explanation in enumerate(bible_explanations, start=1):
             print(f"{idx}. Date: {explanation.get('date', 'N/A')}")
