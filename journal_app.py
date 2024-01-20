@@ -81,6 +81,46 @@ def add_explanation():
     # Save data immediately after each operation
     save_to_file()
 
+def modify_explanation():
+    view_explanations()  # Display explanations for user reference
+    if not bible_explanations:
+        print("No explanations available to modify.")
+        return
+    
+    try:
+        index_to_modify = int(input("Enter the index of the explanation to modify: "))
+        if 1 <= index_to_modify <= len(bible_explanations):
+            explanation_to_modify = bible_explanations[index_to_modify - 1]
+
+            print("Current explanation:")
+            print(explanation_to_modify)
+
+            # Get new values for the explanation
+            explanation_to_modify["book"] = input("Enter the new book of the gospel (press enter to keep current value): ") or explanation_to_modify["book"]
+            explanation_to_modify["chapter"] = input("Enter the new chapter of the gospel (press enter to keep current value): ") or explanation_to_modify["chapter"]
+            explanation_to_modify["verse"] = input("Enter the new verse of the gospel (press enter to keep current value): ") or explanation_to_modify["verse"]
+            explanation_to_modify["headline"] = input("Enter a new headline for the explanation (press enter to keep current value): ") or explanation_to_modify["headline"]
+            explanation_to_modify["message1"] = input("Enter new message 1 (press enter to keep current value): ") or explanation_to_modify["message1"]
+            explanation_to_modify["bodymessage1"] = input("Enter the new explanation for message 1 (press enter to keep current value): ") or explanation_to_modify["bodymessage1"]
+            explanation_to_modify["message2"] = input("Enter new message 2 (press enter to keep current value): ") or explanation_to_modify["message2"]
+            explanation_to_modify["bodymessage2"] = input("Enter the new explanation for message 2 (press enter to keep current value): ") or explanation_to_modify["bodymessage2"]
+            explanation_to_modify["message3"] = input("Enter new message 3 (press enter to keep current value): ") or explanation_to_modify["message3"]
+            explanation_to_modify["bodymessage3"] = input("Enter the new explanation for message 3 (press enter to keep current value): ") or explanation_to_modify["bodymessage3"]
+
+            print("Explanation modified successfully.")
+        else:
+            print("Invalid index. Please enter a valid index.")
+    except ValueError:
+        print("Invalid input. Please enter a valid index.")
+
+# Print modified explanation
+    print("Modified explanation:")
+    print(explanation_to_modify)
+
+    # Save changes to file
+    save_to_file()
+    print("Explanation modified successfully.")
+
 def save_to_file():
     with open(json_file_path, "w") as file:
         # Sort explanations by date before saving
@@ -163,10 +203,11 @@ while True:
     print("2. View Explanations")
     print("3. Save Explanations to file")
     print("4. Delete Explanation")
-    print("5. Exit")
-
-    choice = input("Enter your choice (1/2/3/4/5): ")
-
+    print("5. Modify Explanation")
+    print("6. Exit")
+    
+    choice = input("Enter your choice (1/2/3/4/5/6): ")
+    
     if choice == "1":
         add_explanation()
     elif choice == "2":
@@ -176,7 +217,9 @@ while True:
     elif choice == "4":
         delete_explanation()
     elif choice == "5":
+        modify_explanation()
+    elif choice == "6":
         print("Exiting the Bible explanation application.")
         break
     else:
-        print("Invalid choice. Please enter 1, 2, 3, 4 or 5.")
+        print("Invalid choice. Please enter 1, 2, 3, 4, 5, or 6.")
