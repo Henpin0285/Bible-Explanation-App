@@ -2,7 +2,7 @@ import json
 import os
 
 # Path to the JSON file
-json_file_path = "C:/Users/henry/OneDrive/Desktop/Project Foster Farm Family House/Journal Project JSON(Personal)/bible_explanations.json"
+json_file_path = "C:/Users/henry/Documents/Project Foster Farm Family House/Journal Project JSON(Personal)/bible_explanations.json"
 
 # Check if the JSON file exists
 if os.path.exists(json_file_path):
@@ -106,8 +106,10 @@ def modify_explanation():
             explanation_to_modify["bodymessage2"] = input("Enter the new explanation for message 2 (press enter to keep current value): ") or explanation_to_modify["bodymessage2"]
             explanation_to_modify["message3"] = input("Enter new message 3 (press enter to keep current value): ") or explanation_to_modify["message3"]
             explanation_to_modify["bodymessage3"] = input("Enter the new explanation for message 3 (press enter to keep current value): ") or explanation_to_modify["bodymessage3"]
+            explanation_to_modify["date"] = input("Enter the new date (press enter to keep current value): ") or explanation_to_modify["date"]
 
             print("Explanation modified successfully.")
+            save_to_file()  # Save changes after modification
         else:
             print("Invalid index. Please enter a valid index.")
     except ValueError:
@@ -193,6 +195,56 @@ def delete_explanation():
     except ValueError:
         print("Invalid input. Please enter a valid index.")
 
+def search_explanations():
+    keyword = input("Enter keyword, book, chapter, or verse to search: ").lower()
+    matching_explanations = []
+
+    for explanation in bible_explanations:
+        if (
+            keyword in explanation["book"].lower() or
+            keyword in explanation["chapter"].lower() or
+            keyword in explanation["verse"].lower() or
+            any(keyword in msg.lower() for msg in [explanation["message1"], explanation["message2"], explanation["message3"]]) or
+            any(keyword in body_msg.lower() for body_msg in [explanation["bodymessage1"], explanation["bodymessage2"], explanation["bodymessage3"]])
+        ):
+            matching_explanations.append(explanation)
+
+    if not matching_explanations:
+        print("No matching explanations found.")
+        return
+
+    print("\n*** Matching Explanations ***")
+    for idx, explanation in enumerate(matching_explanations, start=1):
+        print(f"{idx}. Date: {explanation.get('date', 'N/A')}")
+        print(f"   Book: {highlight_keyword(explanation.get('book', 'N/A'), keyword)}, "
+              f"Chapter: {highlight_keyword(explanation.get('chapter', 'N/A'), keyword)}, "
+              f"Verse: {highlight_keyword(explanation.get('verse', 'N/A'), keyword)}")
+        print(f"   Headline: {highlight_keyword(explanation.get('headline', 'N/A'), keyword)}")
+
+        # Print messages and their bodies with checks
+        print(f"   Message 1: {highlight_keyword(explanation.get('message1', 'N/A'), keyword)}")
+        print(f"   Body for Message 1: {highlight_keyword(explanation.get('bodymessage1', 'N/A'), keyword)}")
+
+        print(f"   Message 2: {highlight_keyword(explanation.get('message2', 'N/A'), keyword)}")
+        print(f"   Body for Message 2: {highlight_keyword(explanation.get('bodymessage2', 'N/A'), keyword)}")
+
+        print(f"   Message 3: {highlight_keyword(explanation.get('message3', 'N/A'), keyword)}")
+        print(f"   Body for Message 3: {highlight_keyword(explanation.get('bodymessage3', 'N/A'), keyword)}")
+
+        print()
+        
+def highlight_keyword(text, keyword):
+    highlighted_text = "\033[1;31m"  # ANSI escape code for bold red text
+    reset_format = "\033[0m"  # ANSI escape code to reset text formatting
+
+    # Use case-insensitive search for highlighting
+    keyword_lower = keyword.lower()
+    index = text.lower().find(keyword_lower)
+
+    if index != -1:
+        return text[:index] + highlighted_text + text[index:index + len(keyword)] + reset_format + text[index + len(keyword):]
+
+    return text
 
 # Load explanations from file (if any) when the program starts
 load_explanations()
@@ -204,9 +256,10 @@ while True:
     print("3. Save Explanations to file")
     print("4. Delete Explanation")
     print("5. Modify Explanation")
-    print("6. Exit")
+    print("6. Search Explanations")
+    print("7. Exit")
     
-    choice = input("Enter your choice (1/2/3/4/5/6): ")
+    choice = input("Enter your choice (1/2/3/4/5/6/7): ")
     
     if choice == "1":
         add_explanation()
@@ -219,7 +272,9 @@ while True:
     elif choice == "5":
         modify_explanation()
     elif choice == "6":
+        search_explanations()
+    elif choice == "7":
         print("Exiting the Bible explanation application.")
         break
     else:
-        print("Invalid choice. Please enter 1, 2, 3, 4, 5, or 6.")
+        print("Invalid choice. Please enter 1, 2, 3, 4, 5, 6, or 7.")
